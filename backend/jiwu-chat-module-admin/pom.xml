@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.jiwu</groupId>
         <artifactId>jiwu-chat-api</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.8.4</version>
     </parent>
 
     <artifactId>jiwu-chat-module-admin</artifactId>
