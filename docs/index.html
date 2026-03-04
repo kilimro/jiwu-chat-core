@@ -969,7 +969,7 @@
                 />
                 <div class="mode-check"><div class="mode-check-dot"></div></div>
                 <div class="mode-card-title">源码构建</div>
-                <div class="mode-card-desc">本地构建 Docker 镜像，适合自定义前端 API 地址</div>
+                <div class="mode-card-desc">本地构建 Docker 镜像，前后端配置均在部署时通过 .env 生效</div>
               </label>
             </div>
           </div>
@@ -1028,7 +1028,7 @@
                 class="field"
                 id="field-vite-api"
               >
-                <label for="VITE_API_BASE_URL">后端 API 地址 <span class="opt-tag">构建时注入</span></label>
+                <label for="VITE_API_BASE_URL">后端 API 地址 <span class="opt-tag">部署时注入</span></label>
                 <input
                   type="text"
                   id="VITE_API_BASE_URL"
@@ -1043,12 +1043,12 @@
                 class="field"
                 id="field-vite-ws"
               >
-                <label for="VITE_API_WS_BASE_URL">WebSocket 地址 <span class="opt-tag">构建时注入</span></label>
+                <label for="VITE_API_WS_BASE_URL">WebSocket 地址 <span class="opt-tag">部署时注入</span></label>
                 <input
                   type="text"
                   id="VITE_API_WS_BASE_URL"
                   class="monospace"
-                  value="ws://localhost:9091/ws"
+                  value="ws://localhost:9091/"
                   placeholder="ws://your-domain.com:9091/ws"
                   oninput="update()"
                 />
@@ -1066,7 +1066,7 @@
                   placeholder="https://oss.example.com/"
                   oninput="update()"
                 />
-                <p class="field-hint">七牛 / 其他 CDN 静态资源前缀，不填则使用本地存储</p>
+                <p class="field-hint">七牛 / 其他 CDN 静态资源前缀</p>
               </div>
             </div>
 
@@ -1845,7 +1845,7 @@
                 <span
                   class="service-url-value"
                   id="svc-ws"
-                  >ws://localhost:9091/ws</span
+                  >ws://localhost:9091/</span
                 >
                 <button
                   class="svc-copy-btn"
@@ -2018,15 +2018,14 @@
         const buildCard = document.getElementById("mode-build-card");
         const imgBlock = document.getElementById("field-image-block");
         const viteBlock = document.getElementById("field-vite-block");
-        // Show/hide fields
+        // Show/hide fields（前端 VITE_* 两种模式均显示，部署时生效）
         if (m === "image") {
           imgCard.classList.add("active");
           buildCard.classList.remove("active");
           imgBlock.style.display = "";
-          // hide vite fields
           ["field-vite-api", "field-vite-ws", "field-vite-oss"].forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.style.display = "none";
+            if (el) el.style.display = "";
           });
         } else {
           buildCard.classList.add("active");
@@ -2074,13 +2073,11 @@
         line("API_WS_PORT", val("API_WS_PORT") || "9091");
         cmmt("");
 
-        if (mode === "build") {
-          cmmt("# ---------- 前端构建参数 ----------");
-          line("VITE_API_BASE_URL", val("VITE_API_BASE_URL") || "http://localhost:9090/");
-          line("VITE_API_WS_BASE_URL", val("VITE_API_WS_BASE_URL") || "ws://localhost:9091/ws");
-          optl("VITE_BASE_OSS_PATH", val("VITE_BASE_OSS_PATH"));
-          cmmt("");
-        }
+        cmmt("# ---------- 前端（部署时生效，重启容器即可） ----------");
+        line("VITE_API_BASE_URL", val("VITE_API_BASE_URL") || "http://localhost:9090/");
+        line("VITE_API_WS_BASE_URL", val("VITE_API_WS_BASE_URL") || "ws://localhost:9091/");
+        optl("VITE_BASE_OSS_PATH", val("VITE_BASE_OSS_PATH"));
+        cmmt("");
 
         cmmt("# ---------- 中间件 ----------");
         line("MYSQL_ROOT_PASSWORD", val("MYSQL_ROOT_PASSWORD") || "password");

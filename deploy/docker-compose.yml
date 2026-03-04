@@ -1,6 +1,6 @@
-# JiwuChat 发布整合包 - 仅拉取单镜像，无需构建（前端 npx serve，后端 Spring Boot）
+# JiwuChat 发布整合包 - 仅拉取单镜像，无需构建（前端 Node 服务响应时注入配置，后端 Spring Boot）
 # 使用：cp .env.example .env 并填写 JIWU_CHAT_IMAGE 后，执行 ./start.sh 或 docker compose up -d
-# 访问：前端 http://localhost:3000  后端 http://localhost:9090  API 文档 http://localhost:9090/doc.html  WebSocket ws://localhost:9091/ws
+# 访问：前端 http://localhost:3000  后端 http://localhost:9090  API 文档 http://localhost:9090/doc.html  WebSocket ws://localhost:9091/
 
 services:
   mysql:
@@ -69,6 +69,9 @@ services:
       - "${API_WS_PORT:-9091}:9091"
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:9090/}
+      VITE_API_WS_BASE_URL: ${VITE_API_WS_BASE_URL:-ws://localhost:9091/}
+      VITE_BASE_OSS_PATH: ${VITE_BASE_OSS_PATH:-}
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/jiwu-chat-db?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}

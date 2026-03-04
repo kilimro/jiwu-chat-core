@@ -132,12 +132,12 @@ docker compose up -d --build
 
 | 服务      | 地址                                              |
 | --------- | ------------------------------------------------- |
-| 前端      | http://localhost:3000（npx serve .output/public） |
+| 前端      | http://localhost:3000                             |
 | 后端 API  | http://localhost:9090                             |
 | API 文档  | http://localhost:9090/doc.html                    |
-| WebSocket | ws://localhost:9091/ws                            |
+| WebSocket | ws://localhost:9091/                            |
 
-默认体验账号：`ikun233` / `123456`。停止服务：`docker compose down`。详细说明见 [DOCKER.md](DOCKER.md)；前后端可配置项见 [CONFIG.md](CONFIG.md)（根目录 `.env`）。
+默认体验账号：`ikun233` / `123456`。停止服务：`docker compose down`。详细说明见 [DOCKER.md](DOCKER.md)；前后端均在部署时通过根目录 `.env` 配置，见 [CONFIG.md](CONFIG.md)。
 
 ### 三、环境要求概览（本地开发）
 
@@ -168,7 +168,7 @@ mvn spring-boot:run -pl jiwu-chat-starter
 | --------- | ------------------------------ |
 | HTTP API  | http://localhost:9090          |
 | API 文档  | http://localhost:9090/doc.html |
-| WebSocket | ws://localhost:9091/ws         |
+| WebSocket | ws://localhost:9091/         |
 
 ### 3. 启动前端
 

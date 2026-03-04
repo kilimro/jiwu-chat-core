@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
 - Profiles: `dev` (default), `test`, `pre`, `prod`
 - Config files: `jiwu-chat-starter/src/main/resources/application-{profile}.yml`
 - API docs: `http://localhost:9090/doc.html`
-- WebSocket: `ws://localhost:9091/ws`
+- WebSocket: `ws://localhost:9091/`
 - Database init scripts: `docker-entrypoint-initdb.d/`
 
 ## External Services

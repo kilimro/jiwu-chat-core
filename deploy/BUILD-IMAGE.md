@@ -19,9 +19,7 @@
 ```bash
 cd <项目根目录>
 
-# 可选：配置构建时的前端 API 地址（用户访问你服务的域名时必改）
-# cp .env.example .env
-# 编辑 .env：VITE_API_BASE_URL、VITE_API_WS_BASE_URL 改为你的域名，如 https://api.example.com/ 、 wss://api.example.com/ws
+# 可选：根目录 .env 中的 VITE_* 会作为 build-arg 默认值，部署时仍可通过 .env 覆盖，无需为不同环境构建多次
 
 # 仅构建应用镜像（不启动其他服务）
 docker compose build jiwu-chat
@@ -33,7 +31,7 @@ docker compose build jiwu-chat
 docker build -f docker/Dockerfile \
   --build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY:-docker.io} \
   --build-arg VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:9090/} \
-  --build-arg VITE_API_WS_BASE_URL=${VITE_API_WS_BASE_URL:-ws://localhost:9091/ws} \
+  --build-arg VITE_API_WS_BASE_URL=${VITE_API_WS_BASE_URL:-ws://localhost:9091/} \
   -t jiwu-chat:latest .
 ```
 
@@ -130,16 +128,14 @@ docker push registry.cn-hangzhou.aliyuncs.com/你的命名空间/jiwu-chat:v1.0.
 
 ---
 
-## 六、可选：对外部署时前端地址
+## 六、对外部署时前端地址（部署时配置，无需重构建）
 
-若用户通过 **Nginx 反代** 或 **域名** 访问（非 localhost），需要在**你构建镜像时**就把前端请求的 API 地址写进镜像：
+若用户通过 **Nginx 反代** 或 **域名** 访问（非 localhost），只需在**部署目录**的 `.env` 中设置：
 
-- 在项目根目录 `.env` 中设置：
-  - `VITE_API_BASE_URL=https://api.你的域名/`
-  - `VITE_API_WS_BASE_URL=wss://api.你的域名/ws`
-- 再执行 `docker compose build jiwu-chat` 并重新打标签、推送。
+- `VITE_API_BASE_URL=https://api.你的域名/`
+- `VITE_API_WS_BASE_URL=wss://api.你的域名/ws`
 
-这样用户用你的镜像部署到自己的域名时，前端会正确请求该域名下的 API 与 WebSocket。若用户始终用 localhost 访问，可省略此步。
+然后执行 `docker compose up -d` 重启容器即可生效，无需重新构建镜像。同一镜像可在不同环境用不同 `.env` 配置。
 
 ---
 

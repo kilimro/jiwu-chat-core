@@ -1,6 +1,6 @@
 # JiwuChat Docker 一键启动说明
 
-本方案通过 Docker Compose 一键启动完整系统：MySQL、Redis、RabbitMQ、**前后端单包应用**（前端 SSG 由 `npx serve .output/public` 提供，后端 Spring Boot），无需在本地安装除 Docker 以外的依赖。
+本方案通过 Docker Compose 一键启动完整系统：MySQL、Redis、RabbitMQ、**前后端单包应用**（前端 SSG 由 Node 轻量服务提供，响应时按环境变量注入 API 地址等配置；后端 Spring Boot），无需在本地安装除 Docker 以外的依赖。
 
 ## 两种使用方式
 
@@ -36,10 +36,10 @@ docker compose up -d --build
 
 | 服务 | 地址 |
 |------|------|
-| 前端（npx serve） | http://localhost:3000 |
+| 前端 | http://localhost:3000 |
 | 后端 API | http://localhost:9090 |
 | API 文档 | http://localhost:9090/doc.html |
-| WebSocket | ws://localhost:9091/ws |
+| WebSocket | ws://localhost:9091/ |
 | RabbitMQ 管理 | 未暴露端口，需可进入容器或自行映射 |
 
 默认体验账号：**ikun233** / **123456**（由数据库初始化脚本创建）。
@@ -51,7 +51,7 @@ docker compose up -d --build
 | jiwu-mysql | MySQL 8.0，库 `jiwu-chat-db` | 仅内网（3306） |
 | jiwu-redis | Redis 6.2 | 仅内网（6379） |
 | jiwu-rabbitmq | RabbitMQ 3.13 | 仅内网（5672/15672） |
-| jiwu-chat | 前后端单包（npx serve 前端 + Spring Boot API + WebSocket） | 3000（前端）、9090（HTTP）、9091（WS） |
+| jiwu-chat | 前后端单包（Node 静态服务 + Spring Boot API + WebSocket，前端 API 地址由环境变量在部署时注入） | 3000（前端）、9090（HTTP）、9091（WS） |
 
 数据库与中间件不对外暴露端口，仅应用对外。
 
@@ -77,7 +77,7 @@ docker compose up -d --build jiwu-chat
 
 ## 配置说明
 
-- **前后端统一配置**：在项目根目录使用 `.env` 配置（可复制 `.env.example`）。前端构建时读取 `VITE_*`，后端运行时读取 `SPRING_*`、`MAIL_*`、`QINIU_*` 等。详见 [CONFIG.md](CONFIG.md)。
+- **前后端统一配置**：在项目根目录使用 `.env` 配置（可复制 `.env.example`）。前端与后端均在**运行时**读取环境变量（`VITE_*`、`SPRING_*`、`MAIL_*`、`QINIU_*` 等），修改后重启容器即可，无需重新构建。详见 [CONFIG.md](CONFIG.md)。
 - **直接指定镜像地址**：若拉取 Docker Hub 较慢或失败，可在项目根目录创建 `.env`，设置 `DOCKER_REGISTRY=镜像地址`（如 `DOCKER_REGISTRY=docker.1ms.run`）。该变量会作用于：① Compose 中的 MySQL/Redis/RabbitMQ 镜像；② `docker/Dockerfile` 构建时的基础镜像（Maven、Eclipse Temurin、Node）。可参考根目录 `.env.example`。
 - **数据库**：由 `backend/docker-entrypoint-initdb.d/jiwu-chat-db.sql` 在 MySQL 首次启动时自动建库建表并写入基础数据。库名为 `jiwu-chat-db`。
 - **应用环境变量**：在根目录 `docker-compose.yml` 中配置，如数据库密码、Redis/RabbitMQ 连接等。生产部署请修改默认密码。

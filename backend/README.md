@@ -124,7 +124,7 @@ mvn spring-boot:run -pl jiwu-chat-starter -Dspring-boot.run.profiles=test
 | --------- | ------------------------------ |
 | HTTP API  | http://localhost:9090          |
 | API 文档  | http://localhost:9090/doc.html |
-| WebSocket | ws://localhost:9091/ws         |
+| WebSocket | ws://localhost:9091/         |
 
 默认管理员账号见数据库脚本说明（用户名 `admin`，首次部署后请修改密码）。
 

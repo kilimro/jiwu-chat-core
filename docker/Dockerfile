@@ -15,7 +15,7 @@ WORKDIR /app
 COPY frontend/ frontend/
 WORKDIR /app/frontend
 ARG VITE_API_BASE_URL=http://localhost:9090/
-ARG VITE_API_WS_BASE_URL=ws://localhost:9091/ws
+ARG VITE_API_WS_BASE_URL=ws://localhost:9091/
 ARG VITE_BASE_OSS_PATH=
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_API_WS_BASE_URL=$VITE_API_WS_BASE_URL
@@ -35,6 +35,7 @@ WORKDIR /app
 COPY --from=backend /build/backend/target/jiwu-chat-api.jar /app/jiwu-chat-api.jar
 COPY --from=frontend /app/frontend/.output/public /app/frontend
 COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/serve-with-config.js /app/serve-with-config.js
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 9090 9091 3000
@@ -51,5 +52,9 @@ ENV SPRING_RABBITMQ_HOST=""
 ENV SPRING_RABBITMQ_PORT=5672
 ENV SPRING_RABBITMQ_USERNAME=""
 ENV SPRING_RABBITMQ_PASSWORD=""
+# 前端部署时可覆盖，无需在构建时写死（见 serve-with-config.js）
+ENV VITE_API_BASE_URL=http://localhost:9090/
+ENV VITE_API_WS_BASE_URL=ws://localhost:9091/
+ENV VITE_BASE_OSS_PATH=""
 
 ENTRYPOINT ["/entrypoint.sh"]

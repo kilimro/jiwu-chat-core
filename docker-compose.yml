@@ -1,6 +1,6 @@
 # JiwuChat 一键整体启动（前后端单包：前端 npx serve .output/public，后端 Spring Boot）
 # 使用：docker compose up -d --build
-# 访问：前端 http://localhost:3000  后端 http://localhost:9090  API 文档 http://localhost:9090/doc.html  WebSocket ws://localhost:9091/ws
+# 访问：前端 http://localhost:3000  后端 http://localhost:9090  API 文档 http://localhost:9090/doc.html  WebSocket ws://localhost:9091/
 # 可选 .env：DOCKER_REGISTRY=镜像加速地址（如 docker.1ms.run）
 
 services:
@@ -68,7 +68,7 @@ services:
       args:
         DOCKER_REGISTRY: ${DOCKER_REGISTRY:-docker.io}
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:9090/}
-        VITE_API_WS_BASE_URL: ${VITE_API_WS_BASE_URL:-ws://localhost:9091/ws}
+        VITE_API_WS_BASE_URL: ${VITE_API_WS_BASE_URL:-ws://localhost:9091/}
         VITE_BASE_OSS_PATH: ${VITE_BASE_OSS_PATH:-}
     image: jiwu-chat:latest
     container_name: jiwu-chat
@@ -78,6 +78,9 @@ services:
       - "9091:9091"
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:9090/}
+      VITE_API_WS_BASE_URL: ${VITE_API_WS_BASE_URL:-ws://localhost:9091/}
+      VITE_BASE_OSS_PATH: ${VITE_BASE_OSS_PATH:-}
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/jiwu-chat-db?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
