@@ -6,7 +6,7 @@ import { MSG_CTX_NAMES } from "~/constants/msgContext";
  * ctx-name 用于右键菜单
  */
 const { data, enableReaction = true } = defineProps<{
-  data: ChatMessageVO<TextBodyMsgVO | ImgBodyMsgVO | RtcBodyMsgVO | AI_CHATBodyMsgVO | GroupNoticeBodyMsgVO | AI_CHATReplyBodyMsgVO>;
+  data: ChatMessageVO<TextBodyMsgVO | ImgBodyMsgVO | RtcBodyMsgVO | GroupNoticeBodyMsgVO>;
   prevMsg?: Partial<ChatMessageVO<TextBodyMsgVO>>
   enableReaction?: boolean
   index: number

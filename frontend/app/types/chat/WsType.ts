@@ -1,6 +1,6 @@
-import type { Result } from "postcss";
-import type { ChatMessageVO, WSMsgReaction } from "../../composables/api/chat/message";
-import type { CallStatusEnum, CallTypeEnum, SignalTypeEnum, WSRtcCallMsg } from "~/types/chat/rtc";
+import type { Result } from 'postcss'
+import type { ChatMessageVO, WSMsgReaction } from '../../composables/api/chat/message'
+import type { CallStatusEnum, CallTypeEnum, SignalTypeEnum, WSRtcCallMsg } from '~/types/chat/rtc'
 
 /**
  * ws 请求 消息类型 1用户认证、2心跳检测
@@ -13,17 +13,15 @@ export enum WsMsgType {
   /**
    * 心跳包
    */
-  HEARTBEAT,
+  HEARTBEAT
 }
-
 
 export enum WsStatusEnum {
   CONNECTION = 0,
   OPEN = 1,
   SAFE_CLOSE = 2,
-  CLOSE = 3,
+  CLOSE = 3
 }
-
 
 /**
  * 发送websocket消息DTO
@@ -39,19 +37,15 @@ export interface WsSendMsgDTO {
   data: any
 }
 
-
 /**
  * 发送websocket消息DTO
  */
-export interface WsMsgVO extends Result<WsMsgBodyVO> {
-
-}
+export interface WsMsgVO extends Result<WsMsgBodyVO> {}
 
 export interface WsMsgBodyVO<T = WsMsgBodyType> {
   type: T
   data: ChatMessageVO | WSOnlineOfflineNotify | WSMsgRecall | WSFriendApply | WSMemberChange | WSRtcCallMsg | WSMsgReaction
 }
-
 
 /*
 * 系统推送 - 消息类型
@@ -101,17 +95,13 @@ export enum WsMsgBodyType {
    */
   PIN_CONTACT = 10,
   /**
-   * AI推送消息
-   */
-  AI_STREAM = 11,
-  /**
    * 会话信息更新通知
    */
   UPDATE_CONTACT_INFO = 12,
   /**
    * 消息表情反应变更
    */
-  MSG_REACTION = 13,
+  MSG_REACTION = 13
 }
 
 // 上下线通知类型定义
@@ -120,29 +110,28 @@ export interface WSOnlineOfflineNotify {
   onlineNum: number
 }
 
-
 /**
  * RTC信令交互消息
  */
 export interface RtcBodyMsgVO {
   // 通话ID
-  callId?: number;
+  callId?: number
   // 信令类型
-  signalType: SignalTypeEnum;
+  signalType: SignalTypeEnum
   // 信令数据
-  data: any;
+  data: any
   // 接收者ID列表
-  receiverIds: string[];
+  receiverIds: string[]
   // 发送者ID
-  senderId?: string;
+  senderId?: string
   // 通话状态
-  status: CallStatusEnum;
+  status: CallStatusEnum
   // 通话类型
-  type: CallTypeEnum;
+  type: CallTypeEnum
   // 开始时间戳
-  startTime: number;
+  startTime: number
   // 结束时间戳
-  endTime?: number;
+  endTime?: number
 }
 
 export interface OnlineOffItem {
@@ -180,7 +169,7 @@ export interface WSMemberChange {
 export enum WSMemberStatusEnum {
   JOIN = 1, // 加入
   LEAVE = 2, // 离开
-  DEL = 3, // 删除群聊
+  DEL = 3 // 删除群聊
 }
 
 // 置顶通知类型定义
@@ -196,79 +185,6 @@ export interface WSUpdateContactInfoMsg {
   shieldStatus: number
 }
 
-export enum AiRoleEnums {
-  ASSISTANT = "assistant",
-  SYSTEM = "SYSTEM",
-  USER = "user",
-}
-
-// export enum AiModelCode {
-//   KIMI_AI = 1, // kimi
-//   XUNFEI_AI = 2,
-// }
-
-export enum AiBusinessType {
-  TEXT = 1,
-  PHOTO = 2,
-  VIDEO = 3,
-}
-
-export enum AiReplyStatusEnum {
-  /**
-   * 开始
-   */
-  START = 0,
-  /**
-   * 对话中
-   */
-  IN_PROGRESS = 1,
-  /**
-   * 结束
-   */
-  FINISHED = 2,
-  /**
-   * 错误
-   */
-  ERROR = 3,
-  /**
-   * 继续对话
-   */
-  COTINUE = 4,
-}
-
-/**
- * AI回复推送消息类型
- */
-export interface WSAiStreamMsg {
-  msgId: number; // 消息ID
-  roomId: number; // 房间ID
-  userId: string; // 机器人ID
-  content: string; // AI回复内容
-  reasoningContent?: string; // 思考过程
-  replyTime: Date; // 当前块的回复时间
-  role: AiRoleEnums; // 角色，默认为ASSISTANT
-  modelCode: number; // 大模型类型 动态
-  businessCode: AiBusinessType; // 业务类型
-  status: AiReplyStatusEnum; // 状态
-  statusText: string; // 状态文本
-}
-
-// 辅助函数用于获取状态文本
-export function getStatusText(status: AiReplyStatusEnum): string {
-  switch (status) {
-    case AiReplyStatusEnum.START:
-      return "开始";
-    case AiReplyStatusEnum.IN_PROGRESS:
-      return "对话中";
-    case AiReplyStatusEnum.FINISHED:
-      return "已结束";
-    case AiReplyStatusEnum.ERROR:
-      return "错误";
-    default:
-      return "";
-  }
-}
-
 export interface WsMsgDataTypeMap<T> {
   [WsMsgBodyType.MESSAGE]: ChatMessageVO
   [WsMsgBodyType.ONLINE_OFFLINE_NOTIFY]: WSOnlineOfflineNotify
@@ -279,9 +195,6 @@ export interface WsMsgDataTypeMap<T> {
   [WsMsgBodyType.TOKEN_EXPIRED_ERR]: null
   [WsMsgBodyType.RTC_CALL]: WSRtcCallMsg
   [WsMsgBodyType.PIN_CONTACT]: WSPinContactMsg
-  [WsMsgBodyType.AI_STREAM]: WSAiStreamMsg
   [WsMsgBodyType.UPDATE_CONTACT_INFO]: WSUpdateContactInfoMsg
   [WsMsgBodyType.MSG_REACTION]: WSMsgReaction
 }
-
-

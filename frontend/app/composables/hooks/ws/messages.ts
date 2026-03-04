@@ -1,10 +1,10 @@
-import type { WSMsgReaction } from "~/composables/api/chat/message";
-import type { WSRtcCallMsg } from "~/types/chat/rtc";
-import type { WSUpdateContactInfoMsg } from "~/types/chat/WsType";
-import { WsMsgBodyType } from "~/types/chat/WsType";
-import { defineMessageConfig } from "./messageConfig";
-import { emitEvent, handleNotify, silentHandlers, storeToList } from "./messageHandlers";
-import { WsMsgKey } from "./messageKeys";
+import type { WSMsgReaction } from '~/composables/api/chat/message'
+import type { WSRtcCallMsg } from '~/types/chat/rtc'
+import type { WSUpdateContactInfoMsg } from '~/types/chat/WsType'
+import { WsMsgBodyType } from '~/types/chat/WsType'
+import { defineMessageConfig } from './messageConfig'
+import { emitEvent, handleNotify, silentHandlers, storeToList } from './messageHandlers'
+import { WsMsgKey } from './messageKeys'
 
 /**
  * 消息类型配置
@@ -15,94 +15,86 @@ import { WsMsgKey } from "./messageKeys";
  * 2. WsMsgItemMap 类型会自动更新
  * 3. 无需修改其他文件
  *
- * 配置复杂的消息类型可拆分到独立文件：
- * import { aiStreamConfig } from './messages/aiStream'
+ * 配置复杂的消息类型可拆分到独立文件
  */
 export const messageConfig = defineMessageConfig({
   /** 普通消息 */
   [WsMsgBodyType.MESSAGE]: {
     key: WsMsgKey.NEW_MSG,
     type: [] as ChatMessageVO[],
-    handlers: [storeToList, emitEvent, handleNotify],
+    handlers: [storeToList, emitEvent, handleNotify]
   },
 
   /** 上线/下线通知 */
   [WsMsgBodyType.ONLINE_OFFLINE_NOTIFY]: {
     key: WsMsgKey.ONLINE_NOTICE,
     type: [] as WSOnlineOfflineNotify[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 撤回消息 */
   [WsMsgBodyType.RECALL]: {
     key: WsMsgKey.RECALL_MSG,
     type: [] as WSMsgRecall[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 删除消息 */
   [WsMsgBodyType.DELETE]: {
     key: WsMsgKey.DELETE_MSG,
     type: [] as WSMsgDelete[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 好友申请 */
   [WsMsgBodyType.APPLY]: {
     key: WsMsgKey.APPLY_MSG,
     type: [] as WSFriendApply[],
-    handlers: [storeToList, emitEvent, handleNotify],
+    handlers: [storeToList, emitEvent, handleNotify]
   },
 
   /** 成员变更 */
   [WsMsgBodyType.MEMBER_CHANGE]: {
     key: WsMsgKey.MEMBER_MSG,
     type: [] as WSMemberChange[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** Token 过期 */
   [WsMsgBodyType.TOKEN_EXPIRED_ERR]: {
     key: WsMsgKey.TOKEN_MSG,
     type: [] as object[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** RTC 通话 */
   [WsMsgBodyType.RTC_CALL]: {
     key: WsMsgKey.RTC_MSG,
     type: [] as WSRtcCallMsg[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 置顶联系人 */
   [WsMsgBodyType.PIN_CONTACT]: {
     key: WsMsgKey.PIN_CONTACT_MSG,
     type: [] as WSPinContactMsg[],
-    handlers: silentHandlers,
-  },
-
-  /** AI 流式消息 */
-  [WsMsgBodyType.AI_STREAM]: {
-    key: WsMsgKey.AI_STREAM_MSG,
-    type: [] as WSAiStreamMsg[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 更新联系人信息 */
   [WsMsgBodyType.UPDATE_CONTACT_INFO]: {
     key: WsMsgKey.UPDATE_CONTACT_INFO_MSG,
     type: [] as WSUpdateContactInfoMsg[],
-    handlers: silentHandlers,
+    handlers: silentHandlers
   },
 
   /** 消息表情反应 */
   [WsMsgBodyType.MSG_REACTION]: {
     key: WsMsgKey.REACTION_MSG,
     type: [] as WSMsgReaction[],
-    handlers: silentHandlers,
-  },
-});
+    handlers: silentHandlers
+  }
+})
 
 /**
  * WebSocket 消息类型映射接口
@@ -113,19 +105,18 @@ export const messageConfig = defineMessageConfig({
  * 2. WsMsgItemMap 会自动包含新字段，无需手动更新此类型
  */
 export interface WsMsgItemMap {
-  [WsMsgKey.NEW_MSG]: ChatMessageVO[];
-  [WsMsgKey.ONLINE_NOTICE]: WSOnlineOfflineNotify[];
-  [WsMsgKey.RECALL_MSG]: WSMsgRecall[];
-  [WsMsgKey.DELETE_MSG]: WSMsgDelete[];
-  [WsMsgKey.APPLY_MSG]: WSFriendApply[];
-  [WsMsgKey.MEMBER_MSG]: WSMemberChange[];
-  [WsMsgKey.TOKEN_MSG]: object[];
-  [WsMsgKey.RTC_MSG]: WSRtcCallMsg[];
-  [WsMsgKey.PIN_CONTACT_MSG]: WSPinContactMsg[];
-  [WsMsgKey.AI_STREAM_MSG]: WSAiStreamMsg[];
-  [WsMsgKey.UPDATE_CONTACT_INFO_MSG]: WSUpdateContactInfoMsg[];
-  [WsMsgKey.REACTION_MSG]: WSMsgReaction[];
-  [WsMsgKey.OTHER]: object[];
+  [WsMsgKey.NEW_MSG]: ChatMessageVO[]
+  [WsMsgKey.ONLINE_NOTICE]: WSOnlineOfflineNotify[]
+  [WsMsgKey.RECALL_MSG]: WSMsgRecall[]
+  [WsMsgKey.DELETE_MSG]: WSMsgDelete[]
+  [WsMsgKey.APPLY_MSG]: WSFriendApply[]
+  [WsMsgKey.MEMBER_MSG]: WSMemberChange[]
+  [WsMsgKey.TOKEN_MSG]: object[]
+  [WsMsgKey.RTC_MSG]: WSRtcCallMsg[]
+  [WsMsgKey.PIN_CONTACT_MSG]: WSPinContactMsg[]
+  [WsMsgKey.UPDATE_CONTACT_INFO_MSG]: WSUpdateContactInfoMsg[]
+  [WsMsgKey.REACTION_MSG]: WSMsgReaction[]
+  [WsMsgKey.OTHER]: object[]
 }
 
 // 类型验证：确保配置和接口保持同步

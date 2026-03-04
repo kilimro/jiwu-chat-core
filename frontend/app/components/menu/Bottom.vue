@@ -71,6 +71,12 @@ const menuList = computed<MenuItem[]>(() => [
     icon: "i-ri:user-line !w-5 !h-6",
     activeIcon: "i-ri:user-fill !w-5 !h-6",
   },
+  {
+    title: "扩展",
+    icon: "i-ri:apps-2-ai-line",
+    activeIcon: "i-ri:apps-2-ai-fill",
+    onClick: () => chat.showExtension = true,
+  },
 ]);
 
 const activeMenu = computed({
